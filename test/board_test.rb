@@ -7,33 +7,48 @@ require './lib/board'
 
 class BoardTest < Minitest::Test
   def test_it_exists
-
     board = Board.new
-    assert_instance_of Board, board
 
+    assert_instance_of Board, board
   end
 
   def test_it_has_attributes
     skip
     board = Board.new
-
-
   end
 
   def test_cells # Testing works much easier with small board, otherwise assert_equal will be huge...for now
     skip
-
     board = Board.new
-    cell_1 = Cell.new("A1")
-    assert_equal ({"A1"=>cell_1}), board.cells
-
+    cell_1 = Cell.new('A1')
+    assert_equal ({ 'A1' => cell_1 }), board.cells
   end
 
   def test_valid_coordinate?
     board = Board.new
     board.cells
 
-    assert_equal true, board.valid_coordinate?("A1")
-    assert_equal false, board.valid_coordinate?("A5") # currently, key exists but coordinate is always nil
+    assert_equal true, board.valid_coordinate?('A1')
+    assert_equal true, board.valid_coordinate?('D4')
+    assert_equal false, board.valid_coordinate?('A5')
+    assert_equal false, board.valid_coordinate?('E1')
+    assert_equal false, board.valid_coordinate?('A22')
+  end
+
+  def test_valid_placement?
+    board = Board.new
+    cruiser = Ship.new('Cruiser', 3)
+    submarine = Ship.new('Submarine', 2)
+#binding.pry
+    #same length:
+    assert_equal false, board.valid_placement?(cruiser, ["A1", "A2"])
+    assert_equal true, board.valid_placement?(cruiser, ["A1", "A2", "A3"])
+    assert_equal false, board.valid_placement?(submarine, ["A2", "A3", "A4"])
+
+    #consecutive coordinates
+    assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
+    assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
+    assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
+    assert_equal false, board.valid_placement?(cruiser, [submarine, ["C1", "B1"])
   end
 end
