@@ -6,7 +6,7 @@ class Board
 
 
   def initialize
-    @coordinate = coordinate
+
   end
 
   # cells = {'A1' => <ref to each cell class> }
@@ -16,8 +16,8 @@ class Board
 
   def cells
     cells_hash = {}
-    row_letters = ['A']
-    column_numbers = [1]
+    row_letters = ['A', 'B', 'C', 'D']
+    column_numbers = [1, 2, 3, 4]
 
     row_letters.each do |row|
       column_numbers.each do |column|
@@ -28,5 +28,10 @@ class Board
     return cells_hash
   end
 
+  def valid_coordinate?(coordinate)
+    cells.fetch(coordinate).coordinate  # within the cells array, fetch the given
+                                        # key(coordinate eg "A1")'s value, then check the
+                                        # coordinate of the value. cells -> cell -> coordinate
+  end
 
 end
