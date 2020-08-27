@@ -1,10 +1,12 @@
 class Board
 
   attr_reader :cell,
-              :cells
+              :cells,
+              :coordinate
+
 
   def initialize
-
+    @coordinate = coordinate
   end
 
   # cells = {'A1' => <ref to each cell class> }
@@ -14,13 +16,13 @@ class Board
 
   def cells
     cells_hash = {}
-    row_letters = ['A', 'B']
-    column_numbers = [1, 2]
+    row_letters = ['A']
+    column_numbers = [1]
 
     row_letters.each do |row|
       column_numbers.each do |column|
         position = row + column.to_s
-        cells_hash[position] = Cell.new(position)
+        cells_hash[position] = Cell.new(coordinate)
       end
     end
     return cells_hash

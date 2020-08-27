@@ -19,12 +19,12 @@ class BoardTest < Minitest::Test
 
   end
 
-  def test_grid
-    skip
+  def test_cells
+
     #how to test for this??
     board = Board.new
-    cell = Cell.new("A1")
-    assert_equal ({"A1"=>Cell.new(coordinate)}), board.grid
+    cell_1 = Cell.new("A1")
+    assert_equal ({"A1"=>cell_1}), board.cells
 
   end
 end
