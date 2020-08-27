@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'pry'
 require './lib/ship'
 require './lib/cell'
 require './lib/board'
@@ -32,6 +33,7 @@ class BoardTest < Minitest::Test
     board = Board.new
     board.cells
 
-    assert_equal nil, board.valid_coordinate?("A1") # currently, key exists but coordinate is always nil
+    assert_equal true, board.valid_coordinate?("A1")
+    assert_equal false, board.valid_coordinate?("A5") # currently, key exists but coordinate is always nil
   end
 end
