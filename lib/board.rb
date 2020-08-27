@@ -1,10 +1,10 @@
 class Board
 
   attr_reader :board,
+              :cell,
               :cells
   def initialize
-    @board = board
-    @cells = cells
+    @cells = {}
   end
 
   # cells = {'A1' => <ref to each cell class> }
@@ -12,15 +12,18 @@ class Board
   # position = row + column
   # cells[position] = cell.new(coordinate)
 
-  def build_board
+  def grid
     cells = {}
+    row_letters = ['A', 'B', 'C', 'D']
+    column_numbers = [1, 2, 3, 4]
 
-    4.times do |row|
-      4.times do |column|
+    row_letters.each do |row|
+      column_numbers.each do |column|
         position = row + column.to_s
-        cells[position] = cell.new(coordinate)
+        @cells[position] = Cell.new(coordinate)
       end
     end
+    return @cells
   end
 
 
