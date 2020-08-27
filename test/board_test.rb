@@ -9,4 +9,11 @@ class BoardTest < Minitest::Test
     board = Board.new
     assert_instance_of Board, board
   end
+
+  def test_it_has_attributes
+    board = Board.new
+
+
+  end
+
 end
