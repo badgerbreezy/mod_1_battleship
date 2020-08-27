@@ -7,9 +7,8 @@ class Cell
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
-    @impact = true
-    @render = render
-
+    @impact = false
+    
 
   end
 
