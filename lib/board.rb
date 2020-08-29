@@ -31,7 +31,7 @@ class Board
     return false if length_different?(ship, ship_location)
     #consecutive coordinates
 
-    return false if consecutive_column_coordinates(ship, ship_location)
+    return false if consecutive_column_coordinates?(ship, ship_location)
 
 
 
@@ -59,7 +59,7 @@ class Board
     end
   end
 
-  def consecutive_column_coordinates(ship, ship_location)
+  def consecutive_column_coordinates?(ship, ship_location)
     if column_letters_consistent?(ship, ship_location) == true
       column_numbers_pick = ship_location.map do |location|
         location[1] # ["1", "2", "4"]
