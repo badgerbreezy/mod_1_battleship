@@ -58,7 +58,18 @@ class BoardTest < Minitest::Test
     #assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
   end
 
+  def test_row_column_check
+    board = Board.new
+    cruiser = Ship.new('Cruiser', 3)
+    submarine = Ship.new('Submarine', 2)
+
+    board.row_letters_check(cruiser, ["A1", "A3", "B2"])
+    assert_equal false, board.row_letters_check(cruiser, ["A1", "A3", "B2"])
+    assert_equal true, board.row_letters_check(cruiser, ["A1", "A3", "A2"])
+  end
+
   def test_consecutive_column_coordinates
+    skip
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
@@ -69,6 +80,7 @@ class BoardTest < Minitest::Test
   end
 
   def test_consecutive_row_coordinates
+    skip
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)

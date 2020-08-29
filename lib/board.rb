@@ -48,10 +48,20 @@ class Board
     end
   end
 
+  def row_letters_check(ship, ship_location)
+    row_letters_pick = ship_location.map do |location|
+      location[0] # ["A", "B", "C"]
+    end
+    row_letters_pick.all? do |letters|
+      letters == row_letters_pick[0]
+    end
+  end
+
   def consecutive_column_coordinates(ship, ship_location)
     column_numbers_pick = ship_location.map do |location|
       location[1] # ["1", "2", "3"]
     end
+
     column_numbers_test = column_numbers_pick.map do |location|
       location.to_i # [1, 2, 3]
     end
@@ -64,37 +74,28 @@ class Board
         return true
       end
     end
-    #if column_numbers_test != column_numbers_test.sort
-      #false
-    #elsif column_numbers_test == column_numbers_test.sort
-      #true
-    #end
-
-    #column_numbers_test.each_cons(ship.length) do |number|
-      #p number
-    #end
-
-  #.each_cons
-  end
-
-  def consecutive_row_coordinates(ship, ship_location)
-    row_letters_pick = ship_location.map do |location|
-      location[0] # ["A", "B", "C"]
-    end
-    row_letters_test = row_letters_pick.map do |a|
-      a.ord # [65, 66, 67]
-    end
-    first_letter = row_letters_test[0]
-    row_letters_test[1..-1].each do |n| # [65,66,67]
-      if first_letter + 1 != n
-        return false
-      elsif first_letter + 1 == n
-        return true
-      end
-    end
   end
 
 
+
+  #def consecutive_row_coordinates(ship, ship_location)
+    #row_letters_pick = ship_location.map do |location|
+      #location[0] # ["A", "B", "C"]
+    #end
+    #row_letters_test = row_letters_pick.map do |a|
+      #a.ord # [65, 66, 67]
+    #end
+    #first_letter = row_letters_test[0]
+    #row_letters_test[1..-1].each do |n| # [65,66,67]
+      #if first_letter + 1 != n
+        #return false
+      #elsif first_letter + 1 == n
+        #return true
+      #end
+    #end
+  #end
+end
+# --------graveyard----------
 
   #def convert_coordinates(ship, ship_location) # must get result of calling ordinal_difference for columns or for rows
     #ship_location.map do |location|
@@ -119,4 +120,16 @@ class Board
       #false
     #end
   #end
-end
+
+
+#if column_numbers_test != column_numbers_test.sort
+  #false
+#elsif column_numbers_test == column_numbers_test.sort
+  #true
+#end
+
+#column_numbers_test.each_cons(ship.length) do |number|
+  #p number
+#end
+
+#.each_cons
