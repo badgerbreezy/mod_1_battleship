@@ -63,11 +63,21 @@ class BoardTest < Minitest::Test
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
 
-    assert_equal false, board.consecutive_column_coordinates(cruiser, ["A1", "A3", "A2"])
 
+    assert_equal false, board.consecutive_column_coordinates(cruiser, ["A1", "A3", "A2"])
+    assert_equal true, board.consecutive_column_coordinates(cruiser, ["D2", "D3", "D4"])
   end
 
+  def test_consecutive_row_coordinates
+    board = Board.new
+    cruiser = Ship.new('Cruiser', 3)
+    submarine = Ship.new('Submarine', 2)
 
+
+    assert_equal true, board.consecutive_row_coordinates(cruiser, ["A1", "B1", "C1"])
+    assert_equal false, board.consecutive_row_coordinates(cruiser, ["A2", "C2", "D2"])
+    assert_equal false, board.consecutive_row_coordinates(cruiser, ["A1", "B2", "C3"])
+  end
 
 
   #def test_convert_coordinates
@@ -95,3 +105,9 @@ class BoardTest < Minitest::Test
 
 
 end
+
+
+#last_number = column_numbers_test[0]
+#column_numbers_test[1, 2].each do |n| # [2, 3, 4]
+  #if last_number + 1 != n
+    #return false

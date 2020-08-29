@@ -49,34 +49,51 @@ class Board
   end
 
   def consecutive_column_coordinates(ship, ship_location)
-    #row__letters_pick = ship_location.map do |location|
-      #location[0]
-    #end
     column_numbers_pick = ship_location.map do |location|
-      location[1]
+      location[1] # ["1", "2", "3"]
     end
-    column_numbers_test = column_numbers_pick.map do |n|
-      n.to_i
-    end
-    if column_numbers_test != column_numbers_test.sort
-      false
-    elsif column_numbers_test == column_numbers_test.sort
-      true
+    column_numbers_test = column_numbers_pick.map do |location|
+      location.to_i # [1, 2, 3]
     end
 
-
-
-
+    first_number = column_numbers_test[0]
+    column_numbers_test[1..-1].each do |n| # [1, 3, 2]
+      if first_number + 1 != n
+        return false
+      elsif first_number + 1 == n
+        return true
+      end
+    end
+    #if column_numbers_test != column_numbers_test.sort
+      #false
+    #elsif column_numbers_test == column_numbers_test.sort
+      #true
+    #end
 
     #column_numbers_test.each_cons(ship.length) do |number|
       #p number
     #end
 
-
-
-  #.ord
   #.each_cons
   end
+
+  def consecutive_row_coordinates(ship, ship_location)
+    row_letters_pick = ship_location.map do |location|
+      location[0] # ["A", "B", "C"]
+    end
+    row_letters_test = row_letters_pick.map do |a|
+      a.ord # [65, 66, 67]
+    end
+    first_letter = row_letters_test[0]
+    row_letters_test[1..-1].each do |n| # [65,66,67]
+      if first_letter + 1 != n
+        return false
+      elsif first_letter + 1 == n
+        return true
+      end
+    end
+  end
+
 
 
   #def convert_coordinates(ship, ship_location) # must get result of calling ordinal_difference for columns or for rows
