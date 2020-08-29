@@ -17,7 +17,7 @@ class BoardTest < Minitest::Test
     board = Board.new
   end
 
-  def test_cells # Testing works much easier with small board, otherwise assert_equal will be huge...for now
+  def test_it_can_create_cells # Testing works much easier with small board, otherwise assert_equal will be huge...for now
     skip
     board = Board.new
     cell_1 = Cell.new('A1')
@@ -26,7 +26,7 @@ class BoardTest < Minitest::Test
 
   def test_valid_coordinate?
     board = Board.new
-    board.create_cells
+    board.cells
 
     assert_equal true, board.valid_coordinate?('A1')
     assert_equal true, board.valid_coordinate?('D4')
@@ -44,36 +44,42 @@ class BoardTest < Minitest::Test
     #same length:
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2"])
     assert_equal false, board.valid_placement?(submarine, ["A1", "A3", "A4"])
-
-    #consecutive coordinates
+    #consecutive:
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
     assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
     assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
     assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
-
+    #valid:
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
     assert_equal true, board.valid_placement?(cruiser, ["A1", "A2", "A3"])
   end
 
-  #def test_it_can_place(ship, ship_location)
-#
-    #board = Board.new
-    #cruiser = Ship.new('Cruiser', 3)
-#
-    #board.place(cruiser, ["A1", "A2", "A3"])
-    #cell_1 = board.cells["A1"]
-    #cell_2 = board.cells["A2"]
-    #cell_3 = board.cells["A3"]
-    #cell_1.ship
-    #cell_2.ship
-    #cell_3.ship
-    #assert_equal true, cell_3.ship == cell_2.ship
-#
-#
-#
-  #end
+  def test_it_can_place
+    board = Board.new
+    board.cells
+    cruiser = Ship.new('Cruiser', 3)
 
+    board.place(cruiser, ["A1", "A2", "A3"])
+    cell_1 = board.cells["A1"]
+    cell_2 = board.cells["A2"]
+    cell_3 = board.cells["A3"]
+    cell_1.ship
+    cell_2.ship
+    cell_3.ship
+    assert_equal true, cell_3.ship == cell_2.ship
+  end
 
+  def test_ships_overlap?
+
+    board = Board.new
+    cruiser = Ship.new('Cruiser', 3)
+    board.place(cruiser, ["A1", "A2", "A3"])
+    submarine = Ship.new("Submarine", 2)
+    assert_equal true, board.ship_overlap?(submarine, ["A1", "B1"])
+
+    assert_equal false, board.valid_placement?(submarine, ["A1", "B1"])
+    assert_equal true, board.valid_placement?(submarine, ["C1", "C2"])
+  end
 
   def test_length_different?
     board = Board.new

@@ -4,11 +4,11 @@ class Board
   attr_reader :grid, :ship
 
   def initialize
-    @grid = create_cells
-    #@ord_array = []
+    @grid = cells
+
   end
 
-  def create_cells
+  def cells
     cells_hash = Hash.new
     letter_range = 'A'..'D'
     number_range = [1, 2, 3, 4]
@@ -28,22 +28,13 @@ class Board
   end
 
   def valid_placement?(ship, ship_location)
-
-    #ship length -- If the length of the ship and location are different (TRUE), then it is not a valid placement (FALSE)
     return false if length_different?(ship, ship_location)
-    #consecutive coordinates
-    return false if column_coordinates_nonsequential?(ship, ship_location)
-    return false if row_coordinates_nonsequential?(ship, ship_location)
-
+    return false if columns_rows_nonsequestional?(ship, ship_location)
+    return false if ship_overlap?(ship, ship_location)
 
 
     # Code reads down through each return, stops if it hits ONE false. Otherwise, valid_placement? == TRUE
     return true
-
-
-
-    #diagonal
-
   end
 
   def place(ship, ship_location)
@@ -60,11 +51,26 @@ class Board
   end
 # ---------helper methods for valid_placement?-------
 
-  def length_different?(ship, ship_location)
-    return ship.length != ship_location.length
+  def length_different?(ship, ship_location) #TRUE
+    ship.length != ship_location.length
   end
 
-  def column_numbers_inconsistent?(ship, ship_location)
+  def ship_overlap?(ship, ship_location)
+    ship_location.any? do |location|
+      @grid[location].ship != nil
+    end
+
+  end
+
+  def columns_rows_nonsequestional?(ship, ship_location) #TRUE
+    if column_coordinates_nonsequential?(ship, ship_location) == true &&    row_coordinates_nonsequential?(ship, ship_location) == true
+      return true
+    else
+      return false
+    end
+  end
+
+  def column_numbers_inconsistent?(ship, ship_location) #TRUE
     column_numbers_entered = ship_location.map do |location|
       location[1] # ["1", "1", "1"]
     end
@@ -77,7 +83,7 @@ class Board
     end
   end
 
-  def column_coordinates_nonsequential?(ship, ship_location)
+  def column_coordinates_nonsequential?(ship, ship_location) #TRUE
     if column_numbers_inconsistent?(ship, ship_location) == true
       return true
     elsif column_numbers_inconsistent?(ship, ship_location) == false
@@ -93,7 +99,7 @@ class Board
     end
   end
 
-  def row_letters_inconsistent?(ship, ship_location)
+  def row_letters_inconsistent?(ship, ship_location) #TRUE
     row_letters_entered = ship_location.map do |letter|
       letter[0] #["B", "C", "B"]
     end
@@ -106,7 +112,7 @@ class Board
     end
   end
 
-  def row_coordinates_nonsequential?(ship, ship_location)
+  def row_coordinates_nonsequential?(ship, ship_location) #TRUE
     if row_letters_inconsistent?(ship, ship_location) == true
       return true
     elsif row_letters_inconsistent?(ship, ship_location) == false
