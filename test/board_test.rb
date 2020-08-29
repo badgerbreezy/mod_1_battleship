@@ -35,10 +35,14 @@ class BoardTest < Minitest::Test
     assert_equal false, board.valid_coordinate?('A22')
   end
 
-  def test_length_difference
+  def test_length_different?
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
+
+    assert_equal true, board.length_different?(cruiser, ["A1", "A2"])
+    assert_equal true, board.length_different?(submarine, ["A2", "A3", "A4"])
+    assert_equal false, board.length_different?(submarine, ["A2", "A3"])
   end
 
   def test_valid_placement?
@@ -49,10 +53,9 @@ class BoardTest < Minitest::Test
     #same length:
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2"])
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
-  #assert_equal false, board.valid_placement?(submarine, ["A2", "A3", "A4"])
 
-    ##consecutive coordinates
-    #assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
+    #consecutive coordinates
+    assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
     #assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
     #assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
     #assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
@@ -74,7 +77,6 @@ class BoardTest < Minitest::Test
 
     assert_equal false, board.row_numbers_consistent?(cruiser, ["A1", "B1", "C2"])
     assert_equal true, board.row_numbers_consistent?(cruiser, ["B1", "C1", "D1"])
-
   end
 
   def test_consecutive_column_coordinates
@@ -84,7 +86,7 @@ class BoardTest < Minitest::Test
     submarine = Ship.new('Submarine', 2)
 
 
-    assert_equal false, board.consecutive_column_coordinates(cruiser, ["A1", "A3", "A2"])
+    assert_equal false, board.consecutive_column_coordinates(cruiser, ["A1", "A2", "A4"])
     assert_equal true, board.consecutive_column_coordinates(cruiser, ["D2", "D3", "D4"])
   end
 
@@ -94,7 +96,7 @@ class BoardTest < Minitest::Test
     submarine = Ship.new('Submarine', 2)
 
     assert_equal true, board.consecutive_row_coordinates(cruiser, ["A1", "B1", "C1"])
-    assert_equal false, board.consecutive_row_coordinates(cruiser, ["A2", "C2", "D2"])    
+    assert_equal false, board.consecutive_row_coordinates(cruiser, ["A2", "C2", "D2"])
   end
 
 
