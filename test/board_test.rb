@@ -26,7 +26,7 @@ class BoardTest < Minitest::Test
 
   def test_valid_coordinate?
     board = Board.new
-    board.cells
+    board.create_cells
 
     assert_equal true, board.valid_coordinate?('A1')
     assert_equal true, board.valid_coordinate?('D4')
@@ -46,19 +46,32 @@ class BoardTest < Minitest::Test
     assert_equal false, board.valid_placement?(submarine, ["A1", "A3", "A4"])
 
     #consecutive coordinates
-    #assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
-    #assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
-    #assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
-    #assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
+    assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
+    assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
+    assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
+    assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
 
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
-    assert_equal true, board.valid_placement?(cruiser, ["A1", "A3", "A4"])
+    assert_equal true, board.valid_placement?(cruiser, ["A1", "A2", "A3"])
   end
 
-  def test_it_can_place_ship(ship, ship_location)
-    board = Board.new
-    cruiser = Ship.new('Cruiser', 3)
-    board.valid_placement?(cruiser, ["A1", "A3", "A4"])
+  #def test_it_can_place(ship, ship_location)
+#
+    #board = Board.new
+    #cruiser = Ship.new('Cruiser', 3)
+#
+    #board.place(cruiser, ["A1", "A2", "A3"])
+    #cell_1 = board.cells["A1"]
+    #cell_2 = board.cells["A2"]
+    #cell_3 = board.cells["A3"]
+    #cell_1.ship
+    #cell_2.ship
+    #cell_3.ship
+    #assert_equal true, cell_3.ship == cell_2.ship
+#
+#
+#
+  #end
 
 
 
@@ -72,45 +85,50 @@ class BoardTest < Minitest::Test
     assert_equal false, board.length_different?(submarine, ["A2", "A3"])
   end
 
-  def test_column_letters_consistent?
+  def test_column_numbers_inconsistent?
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
 
-    assert_equal false, board.column_letters_consistent?(cruiser, ["A1", "A3", "B2"])
-    assert_equal true, board.column_letters_consistent?(cruiser, ["A1", "A2", "A3"])
+    assert_equal true, board.column_numbers_inconsistent?(cruiser, ["A1", "B2", "C1"])
+    assert_equal true, board.column_numbers_inconsistent?(submarine, ["A1", "B2"])
+    assert_equal false, board.column_numbers_inconsistent?(submarine, ["A1", "B1"])
+    assert_equal false, board.column_numbers_inconsistent?(cruiser, ["A1", "B1", "C1"])
   end
 
-  def test_consecutive_column_coordinates?
+  def test_column_coordinates_nonsequential?
 
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
 
-    assert_equal false, board.consecutive_column_coordinates?(cruiser, ["A1", "A2", "A4"])
-    assert_equal false, board.consecutive_column_coordinates?(cruiser, ["A3", "A2", "A1"])
-
-
+    assert_equal true, board.column_coordinates_nonsequential?(cruiser, ["A1", "B1", "D1"])
+    assert_equal true, board.column_coordinates_nonsequential?(cruiser, ["A3", "A2", "A1"])
+    assert_equal true, board.column_coordinates_nonsequential?(submarine, ["A1", "C1"])
+    assert_equal true, board.column_coordinates_nonsequential?(submarine, ["C1", "B1"])
+    assert_equal false, board.column_coordinates_nonsequential?(submarine, ["B1", "C1"])
+    assert_equal false, board.column_coordinates_nonsequential?(cruiser, ["A1", "B1", "C1"])
   end
 
-  def test_row_numbers_consistent?
+  def test_row_letters_inconsistent?
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
 
-    assert_equal false, board.row_numbers_consistent?(cruiser, ["A1", "B1", "C2"])
-    assert_equal true, board.row_numbers_consistent?(cruiser, ["B1", "C1", "D1"])
+    assert_equal true, board.row_letters_inconsistent?(cruiser, ["B1", "C2", "B3"])
+    assert_equal false, board.row_letters_inconsistent?(cruiser, ["A1", "A2", "A3"])
   end
 
-  def test_consecutive_row_coordinates?
+  def test_row_coordinates_nonsequential?
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
 
-    assert_equal false, board.consecutive_row_coordinates?(submarine, ["A1", "C1"])
-    assert_equal true, board.consecutive_row_coordinates?(cruiser, ["A1", "B1", "C1"])
-    assert_equal false, board.consecutive_row_coordinates?(submarine, ["C1", "B1"])
-    assert_equal false, board.consecutive_row_coordinates?(cruiser, ["A2", "C2", "D2"])
+    assert_equal true, board.row_coordinates_nonsequential?(submarine, ["A3", "A2", "A1"])
+    assert_equal true, board.row_coordinates_nonsequential?(submarine, ["D3", "A2"])
+    assert_equal true, board.row_coordinates_nonsequential?(cruiser, ["A1", "A2", "A4"])
+    assert_equal false, board.row_coordinates_nonsequential?(submarine, ["C1", "C2"])
+    assert_equal false, board.row_coordinates_nonsequential?(cruiser, ["A2", "A3", "A4"])
   end
 
 

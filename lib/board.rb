@@ -1,28 +1,30 @@
 require './lib/ship'
 
 class Board
-  attr_reader :cells_hash, :ord_array, :ship
+  attr_reader :grid, :ship
 
   def initialize
-    @cells_hash = {}
+    @grid = create_cells
     #@ord_array = []
   end
 
-  def cells
-    row_letters = ['A', 'B', 'C', 'D']
-    column_numbers = [1, 2, 3, 4]
+  def create_cells
+    cells_hash = Hash.new
+    letter_range = 'A'..'D'
+    number_range = [1, 2, 3, 4]
 
-    row_letters.each do |row|
-      column_numbers.each do |column|
+    letter_range.each do |row|
+      number_range.each do |column|
         coordinate = row + column.to_s
-        @cells_hash[coordinate] = Cell.new(coordinate)
+        cells_hash[coordinate] = Cell.new(coordinate)
       end
     end
-    @cells_hash
+
+    return cells_hash
   end
 
   def valid_coordinate?(coordinate)
-    cells.value?(cells[coordinate])
+    @grid.value?(grid[coordinate])
   end
 
   def valid_placement?(ship, ship_location)
@@ -30,8 +32,8 @@ class Board
     #ship length -- If the length of the ship and location are different (TRUE), then it is not a valid placement (FALSE)
     return false if length_different?(ship, ship_location)
     #consecutive coordinates
-
-    #return false if consecutive_column_coordinates?(ship, ship_location)
+    return false if column_coordinates_nonsequential?(ship, ship_location)
+    return false if row_coordinates_nonsequential?(ship, ship_location)
 
 
 
@@ -45,69 +47,103 @@ class Board
   end
 
   def place(ship, ship_location)
-    if valid_placement?(ship, ship_location) = true
-      take 
-
-
-
+    if valid_placement?(ship, ship_location)
+      ship_location.each do |location|
+        @grid[location].place_ship(ship)
+      end
+      return true
+    else
+      return false
+    end
+      #take the ship_location array and for each location and cell,
+      #turn each ship = nil to ship
   end
 # ---------helper methods for valid_placement?-------
 
-  def length_different?(ship, ship_location) # Is the ship length and ship location a different length?
-    return ship.length != ship_location.length # If they are different, then length_different? == TRUE
+  def length_different?(ship, ship_location)
+    return ship.length != ship_location.length
   end
 
-  def column_letters_consistent?(ship, ship_location) # helper for consecutive_column_coordinates
-    column_letters_pick = ship_location.map do |location|
-      location[0] # ["A", "A", "A"]
+  def column_numbers_inconsistent?(ship, ship_location)
+    column_numbers_entered = ship_location.map do |location|
+      location[1] # ["1", "1", "1"]
     end
-    column_letters_pick.all? do |letters|
-      letters == column_letters_pick[0]
-    end
-  end
-
-  def consecutive_column_coordinates?(ship, ship_location)
-    if column_letters_consistent?(ship, ship_location) == true
-      column_numbers_pick = ship_location.map do |location|
-        location[1] # ["1", "2", "4"]
-      end
-
-      column_numbers_test = column_numbers_pick.map do |location|
-        location.to_i # [1, 2, 4]
-      end
-
-      column_numbers_test.each_cons(2).all? do |x,y|
-        x == y - 1
+    column_numbers_entered[1..-1].all? do |number|
+      if number != column_numbers_entered[0]
+        return true
+      elsif number == column_numbers_entered[0]
+        return false
       end
     end
   end
 
-  def row_numbers_consistent?(ship, ship_location) # Helper for consecutive_row_coordinates
-    row_numbers_pick = ship_location.map do |location|
-      location[1]
-    end
-      row_numbers_pick.all? do |numbers|
-      numbers == row_numbers_pick[0]
-    end
-  end
-
-  def consecutive_row_coordinates?(ship, ship_location)
-    if row_numbers_consistent?(ship, ship_location) == true
-      row_letters_pick = ship_location.map do |location|
+  def column_coordinates_nonsequential?(ship, ship_location)
+    if column_numbers_inconsistent?(ship, ship_location) == true
+      return true
+    elsif column_numbers_inconsistent?(ship, ship_location) == false
+      column_letters_entered = ship_location.map do |location|
         location[0] # ["A", "B", "C"]
       end
-
-      row_letters_test = row_letters_pick.map do |a|
-        a.ord # [65, 66, 67]
+      column_letters_test = column_letters_entered.map do |letter|
+        letter.ord # [65, 66, 67]
       end
+      column_letters_test.each_cons(2).any? do |x,y|
+        x != y - 1
+      end
+    end
+  end
 
-      row_letters_test.each_cons(2).all? do |x,y|
-        y == x + 1
+  def row_letters_inconsistent?(ship, ship_location)
+    row_letters_entered = ship_location.map do |letter|
+      letter[0] #["B", "C", "B"]
+    end
+    row_letters_entered[1..-1].all? do |number|
+      if number != row_letters_entered[0]
+        return true
+      elsif number == row_letters_entered[0]
+        return false
+      end
+    end
+  end
+
+  def row_coordinates_nonsequential?(ship, ship_location)
+    if row_letters_inconsistent?(ship, ship_location) == true
+      return true
+    elsif row_letters_inconsistent?(ship, ship_location) == false
+      row_numbers_entered = ship_location.map do |number|
+        number[1] # ["1", "2"]
+      end
+      row_numbers_integers = row_numbers_entered.map do |a|
+        a.to_i # [1, 2]
+      end
+      row_numbers_integers.each_cons(2).any? do |x,y|
+        x != y - 1
       end
     end
   end
 end
-
+#def column_coordinates_nonsequential?(ship, ship_location)
+  #if column_numbers_inconsistent?(ship, ship_location) == true
+    #return true
+#
+  #elsif column_numbers_inconsistent?(ship, ship_location) == false
+    #column_letters_entered = ship_location.map do |location|
+      #location[0] # ["A", "B", "C"]
+    #end
+#
+    #column_letters_test = column_letters_entered.map do |letter|
+      #letter.ord # [65, 66, 67]
+    #end
+#
+    #column_letters_test.each_cons(2).all? do |x,y|
+      #if x != y - 1
+        #return true
+      #elsif x == y - 1
+        #return false
+      #end
+    #end
+  #end
+#end
 
 # --------graveyard----------
 
