@@ -48,52 +48,66 @@ class Board
     end
   end
 
-  def row_letters_check(ship, ship_location)
-    row_letters_pick = ship_location.map do |location|
-      location[0] # ["A", "B", "C"]
+  def column_letters_consistent?(ship, ship_location)
+    column_letters_pick = ship_location.map do |location|
+      location[0] # ["A", "A", "A"]
     end
-    row_letters_pick.all? do |letters|
-      letters == row_letters_pick[0]
+    column_letters_pick.all? do |letters|
+      letters == column_letters_pick[0]
+    end
+  end
+
+  def row_numbers_consistent?(ship, ship_location)
+    row_numbers_pick = ship_location.map do |location|
+      location[1]
+    end
+      row_numbers_pick.all? do |numbers|
+      numbers == row_numbers_pick[0]
     end
   end
 
   def consecutive_column_coordinates(ship, ship_location)
-    column_numbers_pick = ship_location.map do |location|
-      location[1] # ["1", "2", "3"]
-    end
+    if column_letters_consistent?(ship, ship_location) == true
 
-    column_numbers_test = column_numbers_pick.map do |location|
-      location.to_i # [1, 2, 3]
-    end
+      column_numbers_pick = ship_location.map do |location|
+        location[1] # ["1", "2", "3"]
+      end
 
-    first_number = column_numbers_test[0]
-    column_numbers_test[1..-1].each do |n| # [1, 3, 2]
-      if first_number + 1 != n
-        return false
-      elsif first_number + 1 == n
-        return true
+      column_numbers_test = column_numbers_pick.map do |location|
+        location.to_i # [1, 2, 3]
+      end
+
+      first_number = column_numbers_test[0]
+      column_numbers_test[1..-1].each do |n| # [1, 3, 2]
+        if first_number + 1 != n
+          return false
+        elsif first_number + 1 == n
+          return true
+        end
       end
     end
   end
 
 
 
-  #def consecutive_row_coordinates(ship, ship_location)
-    #row_letters_pick = ship_location.map do |location|
-      #location[0] # ["A", "B", "C"]
-    #end
-    #row_letters_test = row_letters_pick.map do |a|
-      #a.ord # [65, 66, 67]
-    #end
-    #first_letter = row_letters_test[0]
-    #row_letters_test[1..-1].each do |n| # [65,66,67]
-      #if first_letter + 1 != n
-        #return false
-      #elsif first_letter + 1 == n
-        #return true
-      #end
-    #end
-  #end
+  def consecutive_row_coordinates(ship, ship_location)
+    if row_numbers_consistent?(ship, ship_location) == true
+      row_letters_pick = ship_location.map do |location|
+        location[0] # ["A", "B", "C"]
+      end
+      row_letters_test = row_letters_pick.map do |a|
+        a.ord # [65, 66, 67]
+      end
+      first_letter = row_letters_test[0]
+      row_letters_test[1..-1].each do |n| # [65,66,67]
+        if first_letter + 1 != n
+          return false
+        elsif first_letter + 1 == n
+          return true
+        end
+      end
+    end
+  end
 end
 # --------graveyard----------
 
