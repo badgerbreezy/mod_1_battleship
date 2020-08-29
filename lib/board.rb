@@ -31,7 +31,7 @@ class Board
     return false if length_different?(ship, ship_location)
     #consecutive coordinates
 
-    return false if consecutive_column_coordinates?(ship, ship_location)
+    #return false if consecutive_column_coordinates?(ship, ship_location)
 
 
 
@@ -41,6 +41,13 @@ class Board
 
 
     #diagonal
+
+  end
+
+  def place(ship, ship_location)
+    if valid_placement?(ship, ship_location) = true
+      take 
+
 
 
   end
@@ -84,7 +91,7 @@ class Board
     end
   end
 
-  def consecutive_row_coordinates(ship, ship_location)
+  def consecutive_row_coordinates?(ship, ship_location)
     if row_numbers_consistent?(ship, ship_location) == true
       row_letters_pick = ship_location.map do |location|
         location[0] # ["A", "B", "C"]
