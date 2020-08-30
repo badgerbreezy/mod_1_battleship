@@ -12,18 +12,6 @@ class BoardTest < Minitest::Test
     assert_instance_of Board, board
   end
 
-  def test_it_has_attributes
-    skip
-    board = Board.new
-  end
-
-  def test_it_can_create_cells # Testing works much easier with small board, otherwise assert_equal will be huge...for now
-    skip
-    board = Board.new
-    cell_1 = Cell.new('A1')
-    assert_equal ({ 'A1' => cell_1 }), board.cells
-  end
-
   def test_valid_coordinate?
     board = Board.new
     board.cells
@@ -36,29 +24,29 @@ class BoardTest < Minitest::Test
   end
 
   def test_valid_placement?
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
-
-    #same length:
+    #is same length?:
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2"])
-    assert_equal false, board.valid_placement?(submarine, ["A1", "A3", "A4"])
-    #consecutive:
+    assert_equal false, board.valid_placement?(submarine, ["A2", "A3", "A4"])
+    #is consecutive?:
     assert_equal false, board.valid_placement?(cruiser, ["A1", "A2", "A4"])
     assert_equal false, board.valid_placement?(submarine, ["A1", "C1"])
     assert_equal false, board.valid_placement?(cruiser, ["A3", "A2", "A1"])
     assert_equal false, board.valid_placement?(cruiser, ["C1", "B1"])
-    #valid:
+    #is diagonal?:
+    assert_equal false, board.valid_placement?(cruiser, ["A1", "B2", "C3"])
+    assert_equal false, board.valid_placement?(submarine, ["C2", "D3"])
+    #valid?:
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
-    assert_equal true, board.valid_placement?(cruiser, ["A1", "A2", "A3"])
+    assert_equal true, board.valid_placement?(cruiser, ["B1", "C1", "D1"])
   end
 
   def test_it_can_place
     board = Board.new
     board.cells
     cruiser = Ship.new('Cruiser', 3)
-
     board.place(cruiser, ["A1", "A2", "A3"])
     cell_1 = board.cells["A1"]
     cell_2 = board.cells["A2"]
@@ -66,11 +54,12 @@ class BoardTest < Minitest::Test
     cell_1.ship
     cell_2.ship
     cell_3.ship
+
     assert_equal true, cell_3.ship == cell_2.ship
   end
 
-  def test_ships_overlap?
-
+#-------helper tests for test_valid_placement?----------
+    def test_ships_overlap?
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     board.place(cruiser, ["A1", "A2", "A3"])
@@ -103,7 +92,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_column_coordinates_nonsequential?
-
     board = Board.new
     cruiser = Ship.new('Cruiser', 3)
     submarine = Ship.new('Submarine', 2)
@@ -136,36 +124,4 @@ class BoardTest < Minitest::Test
     assert_equal false, board.row_coordinates_nonsequential?(submarine, ["C1", "C2"])
     assert_equal false, board.row_coordinates_nonsequential?(cruiser, ["A2", "A3", "A4"])
   end
-
-
-  #def test_convert_coordinates
-    #board = Board.new
-#
-    #cruiser = Ship.new('Cruiser', 3)
-    #submarine = Ship.new('Submarine', 2)
-    #board.convert_coordinates(cruiser, ["A1", "A2", "A3"])
-#
-#binding.pry
-#
-    #assert_equal [[65, 49], [65, 50], [65, 51]], board.convert_coordinates(cruiser, ["A1", "A2", "A3"])
-  #end
-#
-  #def test_ordinal_difference
-#
-    #board = Board.new
-    #cruiser = Ship.new('Cruiser', 3)
-    #submarine = Ship.new('Submarine', 2)
-    #board.convert_coordinates(cruiser, ["A1", "A2", "A3"])
-#
-    #assert_equal true, board.ordinal_difference
-  #end
-
-
-
 end
-
-
-#last_number = column_numbers_test[0]
-#column_numbers_test[1, 2].each do |n| # [2, 3, 4]
-  #if last_number + 1 != n
-    #return false
