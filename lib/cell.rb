@@ -24,7 +24,7 @@ class Cell
       @ship.hit
     end
     @impacted = true
-  end
+  end 
 
   def render(answer = false)
     if answer == true && @impacted == false && @ship.nil? == false
