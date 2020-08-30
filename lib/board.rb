@@ -22,7 +22,7 @@ class Board
   end
 
   def valid_coordinate?(coordinate)
-    @grid.value?(grid[coordinate]) 
+    @grid.value?(grid[coordinate])
   end
 
   def valid_placement?(ship, ship_location)
@@ -120,4 +120,6 @@ class Board
       end
     end
   end
+
+  
 end
