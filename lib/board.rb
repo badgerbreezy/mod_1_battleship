@@ -120,7 +120,7 @@ class Board
       end
     end
   end
-
+  
   def render(answer = false)
     column_range = 1..4
     row_range = "A".."D"
@@ -139,5 +139,4 @@ class Board
     end
     puts top_row + board_rows.join
   end
-end
 end
