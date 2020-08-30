@@ -6,7 +6,6 @@ class Cell
     @impacted = false
   end
 
-
   def empty?
     true
   end
@@ -39,7 +38,5 @@ class Cell
     elsif @impacted == true && @ship.nil? == false
       "H"
     end
-
-
   end
 end
