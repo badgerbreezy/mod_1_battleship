@@ -1,5 +1,7 @@
 class Cell
   attr_reader :ship, :coordinate
+
+  attr_accessor :board, :turn
   def initialize(ship = nil, coordinate)
     @coordinate = coordinate
     @ship = ship
@@ -16,27 +18,25 @@ class Cell
   end
 
   def fired_upon?
-    @impacted
+    @impacted == true && @ship.nil? != true
   end
 
   def fire_upon
-    if @ship.nil? == false
-      @ship.hit
-    end
+    @ship.hit if @ship.nil? == false
     @impacted = true
-  end 
+  end
 
   def render(answer = false)
     if answer == true && @impacted == false && @ship.nil? == false
-      "S"
+      'S'
     elsif @impacted == false
       '.'
     elsif @impacted == true && @ship.nil? == true
-      "M"
+      'M'
     elsif @impacted == true && @ship.health == 0
-      "X"
+      'X'
     elsif @impacted == true && @ship.nil? == false
-      "H"
+      'H'
     end
   end
 end
