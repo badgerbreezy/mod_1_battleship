@@ -1,8 +1,10 @@
 class Gameplay
-  attr_reader :computer, :player
+  attr_reader :computer, :player, :player_cruiser, :player_sub
   def initialize(computer, player)
     @computer = computer
     @player = player
+    @player_cruiser = player_cruiser
+    @player_sub = player_sub
   end
 
   def menu
@@ -34,9 +36,9 @@ class Gameplay
       puts ">"
       entry_1 = gets.chomp.upcase.split(" ")
     end
-    player_cruiser = Ship.new("cruiser", 3 )
+    @player_cruiser = Ship.new("cruiser", 3 )
     @player.board.place(player_cruiser, entry_1)
-    player_sub = Ship.new("submarine", 2 )
+    @player_sub = Ship.new("submarine", 2 )
     p "Enter the squares for the Submarine (2 spaces)"
     p ">"
     entry_2 = gets.chomp.upcase.split(" ")
@@ -46,39 +48,44 @@ class Gameplay
       entry_2 = gets.chomp.upcase.split(" ")
     end
     @player.board.place(player_sub, entry_2)
-    require "pry"; binding.pry
     turn
   end
 
   def turn
-    until computer.has_lost? == true || player_1.has_lost? == true
+    until computer.has_lost? == true || (@player_cruiser.health == 0 && @player_sub.health == 0)
       p "=============COMPUTER BOARD============="
       computer.board.render
       p "==============PLAYER BOARD=============="
       player.board.render(true)
-      require "pry"; binding.pry
       player_shot_process
       computer_shot_process
     end
+    if computer.has_lost? == true
+      p "You won!"
+    elsif @player_cruiser.health == 0 && @player_sub.health == 0
+      p "I won!"
+    end
   end
 
-  def shot_process
-    until valid_coordinate(shot_entry) == true
+  def player_shot_process
       p "Enter the coordinate for your shot:"
-      ">"
-      shot_entry = gets.chomp.upcase.to_a
-    if board.valid_coordinate(shot_entry)
-      take_shot
-    else
+      p ">"
+      shot_entry = gets.chomp.upcase
+    until @player.board.valid_coordinate?(shot_entry) == true
       p "Please enter a valid coordinate:"
       p ">"
+      shot_entry = gets.chomp.upcase
     end
+    computer.board.grid[shot_entry].fire_upon
+    # require "pry"; binding.pry
   end
 
   def computer_shot_process
-    until player.board.computer_shot
-      computer_shot = player.board.grid.sample(1)
-    end
+    possible_shots =
+      player.board.grid.keys.find_all do |cell|
+        player.board.grid[cell].impacted == false
+      end
+    coord = possible_shots.shuffle.first
+    player.board.grid[coord].fire_upon
   end
-end
 end
