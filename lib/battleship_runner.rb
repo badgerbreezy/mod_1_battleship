@@ -1,11 +1,11 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require './ship'
-require './cell'
-require './board'
-require './computer'
-require './gameplay'
-require './player'
+require './lib/ship'
+require './lib/cell'
+require './lib/board'
+require './lib/computer'
+require './lib/gameplay'
+require './lib/player'
 runner_board = Board.new
 computer_board = Board.new
 computer = Computer.new(computer_board)

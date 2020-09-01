@@ -1,4 +1,4 @@
-require './gameplay'
+require './lib/gameplay'
 
 class Computer
   attr_reader :board, :computer_sub, :computer_cruiser
