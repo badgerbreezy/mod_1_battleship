@@ -1,8 +1,10 @@
 class Gameplay
-  attr_reader :computer, :player
+  attr_reader :computer, :player, :player_cruiser, :player_sub
   def initialize(computer, player)
     @computer = computer
     @player = player
+    @player_cruiser = player_cruiser
+    @player_sub = player_sub
   end
 
   def menu
@@ -34,11 +36,11 @@ class Gameplay
       puts ">"
       entry_1 = gets.chomp.upcase.split(" ")
     end
-    player_cruiser = Ship.new("cruiser", 3 )
+    @player_cruiser = Ship.new("cruiser", 3 )
     @player.board.place(player_cruiser, entry_1)
-    player_sub = Ship.new("submarine", 2 )
-    p "Enter the squares for the Submarine (2 spaces)"
-    p ">"
+    @player_sub = Ship.new("submarine", 2 )
+    puts "Enter the squares for the Submarine (2 spaces)"
+    puts ">"
     entry_2 = gets.chomp.upcase.split(" ")
     until @player.board.valid_coordinate?(entry_2[0]) == true && @player.board.valid_coordinate?(entry_2[1]) == true && @player.board.valid_placement?(player_sub, entry_2)
       puts "Those are invalid coordinates. Please try again:"
@@ -46,39 +48,63 @@ class Gameplay
       entry_2 = gets.chomp.upcase.split(" ")
     end
     @player.board.place(player_sub, entry_2)
-    require "pry"; binding.pry
     turn
   end
 
   def turn
-    until computer.has_lost? == true || player_1.has_lost? == true
-      p "=============COMPUTER BOARD============="
+    until computer.has_lost? == true || (@player_cruiser.health == 0 && @player_sub.health == 0)
+      puts "=============COMPUTER BOARD============="
       computer.board.render
-      p "==============PLAYER BOARD=============="
+      puts "==============PLAYER BOARD=============="
       player.board.render(true)
-      require "pry"; binding.pry
       player_shot_process
       computer_shot_process
     end
+    if computer.has_lost? == true
+      puts "You won!"
+    elsif @player_cruiser.health == 0 && @player_sub.health == 0
+      puts "I won!"
+    end
+    menu
   end
 
-  def shot_process
-    until valid_coordinate(shot_entry) == true
-      p "Enter the coordinate for your shot:"
-      ">"
-      shot_entry = gets.chomp.upcase.to_a
-    if board.valid_coordinate(shot_entry)
-      take_shot
-    else
-      p "Please enter a valid coordinate:"
-      p ">"
+  def player_shot_process
+      puts "Enter the coordinate for your shot:"
+      puts ">"
+      shot_entry = gets.chomp.upcase
+      if @computer.board.grid[shot_entry].impacted == true
+        puts "You've already fired a shot at that coordinate."
+        player_shot_process
+      end
+    until @player.board.valid_coordinate?(shot_entry) == true
+      puts "Please enter a valid coordinate:"
+      puts ">"
+      shot_entry = gets.chomp.upcase
+    end
+    computer.board.grid[shot_entry].fire_upon
+    if computer.board.grid[shot_entry].render == "M"
+      puts "Your shot on #{shot_entry} was a miss."
+    elsif computer.board.grid[shot_entry].render == "H"
+      puts "Your shot on #{shot_entry} was a hit."
+    elsif computer.board.grid[shot_entry].render == "X"
+      puts "Your shot on #{shot_entry} sunk a ship."
     end
   end
 
   def computer_shot_process
-    until player.board.computer_shot
-      computer_shot = player.board.grid.sample(1)
+    possible_shots =
+      player.board.grid.keys.find_all do |cell|
+        player.board.grid[cell].impacted == false
+      end
+    coord = possible_shots.shuffle.first
+    player.board.grid[coord].fire_upon
+    if player.board.grid[coord].render == "M"
+      puts "My shot on #{coord} was a miss."
+    elsif player.board.grid[coord].render == "H"
+      puts "My shot on #{coord} was a hit."
+    elsif player.board.grid[coord].render == "X"
+      puts "My shot on #{coord} sunk a ship."
     end
+
   end
-end
 end

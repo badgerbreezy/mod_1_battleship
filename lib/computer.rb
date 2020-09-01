@@ -1,13 +1,20 @@
+require './gameplay'
+
 class Computer
-  attr_reader :board
+  attr_reader :board, :computer_sub, :computer_cruiser
   def initialize(board)
     @board = board
     @has_lost = false
+    @computer_sub = computer_sub
+    @computer_cruiser = computer_cruiser
+
   end
 
-
   def has_lost?
-    if @board.cell.
+    if @computer_sub.health == 0 && @computer_cruiser.health == 0
+      true
+    end
+  end
 
   def generate_random_possible_ship_placements(size)
     if size == 2
@@ -17,17 +24,17 @@ class Computer
     else
       possible_ship_placement = generate_ship_coordinate_placement_horizontal(size) + generate_ship_coordinate_placement_vertical(size)
       cruiser_coords = possible_ship_placement.sample
-      cruiser = Ship.new("cruiser", 3)
-      @board.place(cruiser,cruiser_coords)
+      @computer_cruiser = Ship.new("cruiser", 3)
+      @board.place(computer_cruiser,cruiser_coords)
     end
   end
 
   def check_for_overlap(sub_coords)
-    submarine = Ship.new("submarine", 2)
-    if @board.ship_overlap?(submarine, sub_coords) == true
+    @computer_sub = Ship.new("submarine", 2)
+    if @board.ship_overlap?(computer_sub, sub_coords) == true
       generate_random_possible_ship_placements(2)
     else
-      @board.place(submarine, sub_coords)
+      @board.place(computer_sub, sub_coords)
     end
   end
 
