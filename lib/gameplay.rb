@@ -29,14 +29,14 @@ class Gameplay
     puts "Enter the squares for the Cruiser (3 spaces):"
     puts ">"
     entry_1 = gets.chomp.upcase.split(" ")
+    @player_cruiser = Ship.new("cruiser", 3 )
     # require "pry"; binding.pry
     # player_crusier = Ship.new("cruiser", 3 )
-    until @player.board.valid_coordinate?(entry_1[0]) == true && @player.board.valid_coordinate?(entry_1[1]) == true && @player.board.valid_coordinate?(entry_1[2])
+    until @player.board.valid_coordinate?(entry_1[0]) == true && @player.board.valid_coordinate?(entry_1[1]) == true && @player.board.valid_coordinate?(entry_1[2]) && @player.board.valid_placement?(player_cruiser, entry_1)
       puts "Those are invalid coordinates. Please try again:"
       puts ">"
       entry_1 = gets.chomp.upcase.split(" ")
     end
-    @player_cruiser = Ship.new("cruiser", 3 )
     @player.board.place(player_cruiser, entry_1)
     @player_sub = Ship.new("submarine", 2 )
     puts "Enter the squares for the Submarine (2 spaces)"
@@ -72,15 +72,15 @@ class Gameplay
       puts "Enter the coordinate for your shot:"
       puts ">"
       shot_entry = gets.chomp.upcase
+      until @computer.board.valid_coordinate?(shot_entry) == true
+        puts "Please enter a valid coordinate:"
+        puts ">"
+        shot_entry = gets.chomp.upcase
+      end
       if @computer.board.grid[shot_entry].impacted == true
         puts "You've already fired a shot at that coordinate."
         player_shot_process
       end
-    until @player.board.valid_coordinate?(shot_entry) == true
-      puts "Please enter a valid coordinate:"
-      puts ">"
-      shot_entry = gets.chomp.upcase
-    end
     computer.board.grid[shot_entry].fire_upon
     if computer.board.grid[shot_entry].render == "M"
       puts "Your shot on #{shot_entry} was a miss."
