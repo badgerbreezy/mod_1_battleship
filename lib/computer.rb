@@ -3,26 +3,51 @@ require 'pry'
 class Computer
 
 
-  def initialize(my_board, enemy_board)
-    @my_board = my_board
-    @enemy_board = enemy_board
-    @ships = []
+  def initialize(computer_board)
+    @computer_board = computer_board
   end
 
-  def place_computer_ships
-    #computer has its computer board
-    #computer checks to see which cells on the board are valid to place for each ship
-      #Each ship has a ship.length
-      #valid cells are based on ship.length and must be either horizontal from the starting point or vertical, so [A1, A2, A3] [A2, A3, A4] [B1, B2, B3] [B2, B3, B4] [C1, C2, C3] [C2, C3, C4] [D1, D2, D3] [D2, D3, D4] ////
-      #[A1, B1, C1] [B1, C1, D1] [A2, B2, C2] [B2, C2, D2] [A3, B3, C3] [B3, C3, D3] [A4, B4, C4] [B4, C4, D4]
-      #When it randomly (.sample) finds ONE of these sets, it places the ship
-      #Somehow needs to use this method to determine which set it chooses, then affects computer board
+  def generate_random_possible_ship_placements(size)
+      if size == 2
+        possible_ship_placement = possible_columns_by_row(size)
+        sub_coords = possible_ship_placement.sample
+        check_for_overlap(sub_coords)
+      else
+        possible_ship_placement = generate_ship_coordinate_placement_horizontal(size) + generate_ship_coordinate_placement_vertical(size)
+        cruiser_coords = possible_ship_placement.sample
+        cruiser = Ship.new("cruiser", 3)
+        @board.place(cruiser,cruiser_coords)
+      end
+    end
+
+    def ship_placement_random(ship)
+      #First ship places onto board
+      ship_location = determine_possible_placement(ship).sample
+
+      if @board.ship_overlap?(ship, ship_location) == true
+
+        @computer_board.place(ship, ship_location)
+
+      elsif ship != nil
+        @computer_board.ship_overlap?(ship, ship_location) == true
+        @board.place(ship, ship_location)
+      else
+        puts @computer_board.render(true)
+      end
+      puts @computer_board.render(true)
+    end
+
+    def check_for_overlap(ship)
 
 
+      submarine = Ship.new("submarine", 2)
+      if
+        generate_random_possible_ship_placements(2)
+      else
+        @board.place(submarine, sub_coords)
+      end
+    end
 
-  end
-
-#
   def determine_possible_placement(ship)
     possible_rows = []
     possible_rows_by_column = []
@@ -59,7 +84,8 @@ class Computer
     return possible_columns_by_row + possible_rows_by_column
   end
 
-  def ship_placement_random
-  end
-  
+
+
+
+
 end

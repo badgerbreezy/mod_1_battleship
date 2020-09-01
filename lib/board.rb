@@ -69,7 +69,7 @@ class Board
     ship.length != ship_location.length
   end
 
-  def ship_overlap?(_ship, ship_location)
+  def ship_overlap?(ship, ship_location)
     ship_location.any? do |location|
       !@grid[location].ship.nil?
     end
