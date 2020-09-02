@@ -16,6 +16,8 @@ class Gameplay
       set_up
     elsif reply == 'q'
       menu
+    else
+      menu
     end
   end
 
@@ -58,6 +60,9 @@ class Gameplay
       puts "==============PLAYER BOARD=============="
       player.board.render(true)
       player_shot_process
+      if computer.has_lost? == true
+        break
+      end
       computer_shot_process
     end
     if computer.has_lost? == true
@@ -105,6 +110,5 @@ class Gameplay
     elsif player.board.grid[coord].render == "X"
       puts "My shot on #{coord} sunk a ship."
     end
-
   end
 end
