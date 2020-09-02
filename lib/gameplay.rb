@@ -5,10 +5,8 @@ class Gameplay
     @player = player
     @player_cruiser = Ship.new("Cruiser", 3)
     @player_sub = Ship.new("Submarine", 2)
-    @player_destroyer = Ship.new("Destroyer", 4)
     @computer_cruiser = Ship.new("Cruiser", 3)
     @computer_submarine = Ship.new("Submarine", 2)
-    @computer_destroyer = Ship.new("Destroyer", 4)
   end
 
   def menu
@@ -18,7 +16,6 @@ class Gameplay
   reply = gets.chomp.downcase
     if reply == 'p'
       set_up
-    elsif reply == 'q'
     else
       menu
     end
@@ -27,7 +24,6 @@ class Gameplay
   def set_up
     @computer.ship_placement_random(@computer_cruiser)
     @computer.ship_placement_random(@computer_submarine)
-    @computer.ship_placement_random(@computer_destroyer)
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
@@ -36,7 +32,7 @@ class Gameplay
     puts "Enter the squares for the Cruiser (3 spaces):"
     puts ">"
     entry_1 = gets.chomp.upcase.split(" ")
-    #require 'Pry';binding.pry
+
     until @player.board.valid_coordinate?(entry_1[0]) == true && @player.board.valid_coordinate?(entry_1[1]) == true && @player.board.valid_coordinate?(entry_1[2]) && @player.board.valid_placement?(player_cruiser, entry_1)
       puts "Those are invalid coordinates. Please try again:"
       puts ">"
@@ -56,7 +52,8 @@ class Gameplay
   end
 
   def turn
-    until computer.has_lost? == true || (@player_cruiser.health == 0 && @player_sub.health == 0)
+    until computer.has_lost? == true || player.has_lost? == true
+      #require 'Pry';binding.pry
       puts "=============COMPUTER BOARD============="
       computer.board.render
       puts "==============PLAYER BOARD=============="
@@ -66,7 +63,7 @@ class Gameplay
     end
     if computer.has_lost? == true
       puts "You won!"
-    elsif @player_cruiser.health == 0 && @player_sub.health == 0
+    elsif player.has_lost? == true
       puts "I won!"
     end
     menu

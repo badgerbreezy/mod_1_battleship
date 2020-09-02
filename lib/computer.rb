@@ -4,19 +4,18 @@ class Computer
   attr_reader :board
   def initialize(board)
     @board = board
-    @has_lost = false
   end
 
   def has_lost?
-    lost = []
-    board.grid.keys.find_all do |cell|
-      lost << board.grid[cell].ship
+    dead_cells = []
+    board.grid.keys.map do |cell|
+      dead_cells << board.grid[cell].render
     end
-    lost.map do |ship|
-      ship.health
+    if dead_cells.count("X") == 5
+      @has_lost = true
     end
-
   end
+
 
   def ship_placement_random(ship)
     ship_location = determine_possible_placement(ship)
@@ -48,7 +47,6 @@ class Computer
     (1..4).each_cons(ship.length) do |column|
       possible_columns << column
     end
-    # [[1, 2, 3], [2, 3, 4]]
     possible_columns.each do |column_label|
       (1..4).each do |row_label|
         possible_columns_by_row << column_label.map do |column_num|
