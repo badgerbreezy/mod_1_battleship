@@ -42,6 +42,22 @@ class Board
       return false
     end
   end
+
+  def render(answer = false)
+    column_range = 1..4
+    row_range = "A".."D"
+    board_rows = []
+    top_row ="  " + "1 2 3 4" + " \n"
+    row_range.each do |row|
+      row_string = row + " "
+      column_range.each do |column|
+        cell_coordinate = row + column.to_s
+        row_string += @grid[cell_coordinate].render(answer) + " "
+      end
+      board_rows << row_string + "\n"
+    end
+    puts top_row + board_rows.join
+  end
 # ---------helper methods for valid_placement?-------
   def length_different?(ship, ship_location) #TRUE
     ship.length != ship_location.length
@@ -63,7 +79,7 @@ class Board
 
   def column_numbers_inconsistent?(ship, ship_location) #TRUE
     column_numbers_entered = ship_location.map do |location|
-      location[1] # ["1", "1", "1"]
+      location[1]
     end
 
     column_numbers_entered[1..-1].all? do |number|
@@ -80,10 +96,10 @@ class Board
       return true
     elsif column_numbers_inconsistent?(ship, ship_location) == false
       column_letters_entered = ship_location.map do |location|
-        location[0] # ["A", "B", "C"]
+        location[0]
       end
       column_letters_test = column_letters_entered.map do |letter|
-        letter.ord # [65, 66, 67]
+        letter.ord
       end
       column_letters_test.each_cons(2).any? do |x,y|
         x != y - 1
@@ -91,9 +107,9 @@ class Board
     end
   end
 
-  def row_letters_inconsistent?(ship, ship_location) #TRUE
+  def row_letters_inconsistent?(ship, ship_location)
     row_letters_entered = ship_location.map do |letter|
-      letter[0] #["B", "C", "B"]
+      letter[0]
     end
 
     row_letters_entered[1..-1].all? do |number|
@@ -105,38 +121,19 @@ class Board
     end
   end
 
-  def row_coordinates_nonsequential?(ship, ship_location) #TRUE
+  def row_coordinates_nonsequential?(ship, ship_location)
     if row_letters_inconsistent?(ship, ship_location) == true
       return true
     elsif row_letters_inconsistent?(ship, ship_location) == false
       row_numbers_entered = ship_location.map do |number|
-        number[1] # ["1", "2"]
+        number[1]
       end
       row_numbers_integers = row_numbers_entered.map do |a|
-        a.to_i # [1, 2]
+        a.to_i
       end
       row_numbers_integers.each_cons(2).any? do |x,y|
         x != y - 1
       end
     end
-  end
-  
-  def render(answer = false)
-    column_range = 1..4
-    row_range = "A".."D"
-    board_rows = []
-    top_row ="  " + "1 2 3 4" + " \n"
-    row_range.each do |row|
-      row_string = row + " "
-      # ["A ", "B ","C ","D "]
-      column_range.each do |column|
-        cell_coordinate = row + column.to_s
-        # ["A1", "A2",..."D4"]
-        row_string += @grid[cell_coordinate].render(answer) + " "
-        # ["A . .  .  . \n", "B . . . . \n"","C . . . \n,"D . . . .\n"]
-      end
-      board_rows << row_string + "\n"
-    end
-    puts top_row + board_rows.join
   end
 end

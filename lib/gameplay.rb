@@ -3,8 +3,10 @@ class Gameplay
   def initialize(computer, player)
     @computer = computer
     @player = player
-    @player_cruiser = player_cruiser
-    @player_sub = player_sub
+    @player_cruiser = Ship.new("Cruiser", 3)
+    @player_sub = Ship.new("Submarine", 2)
+    @computer_cruiser = Ship.new("Cruiser", 3)
+    @computer_submarine = Ship.new("Submarine", 2)
   end
 
   def menu
@@ -15,6 +17,8 @@ class Gameplay
     if reply == 'p'
       set_up
     elsif reply == 'q'
+      exit
+    else
       menu
     else
       menu
@@ -22,25 +26,23 @@ class Gameplay
   end
 
   def set_up
-    @computer.generate_random_possible_ship_placements(3)
-    @computer.generate_random_possible_ship_placements(2)
+    @computer.ship_placement_random(@computer_cruiser)
+    @computer.ship_placement_random(@computer_submarine)
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
+    @computer.board.render
     @player.board.render
     puts "Enter the squares for the Cruiser (3 spaces):"
     puts ">"
     entry_1 = gets.chomp.upcase.split(" ")
-    @player_cruiser = Ship.new("cruiser", 3 )
-    # require "pry"; binding.pry
-    # player_crusier = Ship.new("cruiser", 3 )
+
     until @player.board.valid_coordinate?(entry_1[0]) == true && @player.board.valid_coordinate?(entry_1[1]) == true && @player.board.valid_coordinate?(entry_1[2]) && @player.board.valid_placement?(player_cruiser, entry_1)
       puts "Those are invalid coordinates. Please try again:"
       puts ">"
       entry_1 = gets.chomp.upcase.split(" ")
     end
     @player.board.place(player_cruiser, entry_1)
-    @player_sub = Ship.new("submarine", 2 )
     puts "Enter the squares for the Submarine (2 spaces)"
     puts ">"
     entry_2 = gets.chomp.upcase.split(" ")
@@ -54,7 +56,8 @@ class Gameplay
   end
 
   def turn
-    until computer.has_lost? == true || (@player_cruiser.health == 0 && @player_sub.health == 0)
+    until computer.has_lost? == true || player.has_lost? == true
+      #require 'Pry';binding.pry
       puts "=============COMPUTER BOARD============="
       computer.board.render
       puts "==============PLAYER BOARD=============="
@@ -67,16 +70,16 @@ class Gameplay
     end
     if computer.has_lost? == true
       puts "You won!"
-    elsif @player_cruiser.health == 0 && @player_sub.health == 0
+    elsif player.has_lost? == true
       puts "I won!"
     end
     menu
   end
 
   def player_shot_process
-      puts "Enter the coordinate for your shot:"
-      puts ">"
-      shot_entry = gets.chomp.upcase
+    puts "Enter the coordinate for your shot:"
+    puts ">"
+    shot_entry = gets.chomp.upcase
       until @computer.board.valid_coordinate?(shot_entry) == true
         puts "Please enter a valid coordinate:"
         puts ">"
