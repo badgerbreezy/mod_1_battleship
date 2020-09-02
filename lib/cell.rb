@@ -1,5 +1,5 @@
 class Cell
-  attr_reader :ship, :coordinate
+  attr_reader :ship, :coordinate, :impacted
   def initialize(ship = nil, coordinate)
     @coordinate = coordinate
     @ship = ship
@@ -20,11 +20,11 @@ class Cell
   end
 
   def fire_upon
-    if @ship.nil? == false
+    if @ship.nil? == false && !@impacted
       @ship.hit
     end
     @impacted = true
-  end 
+  end
 
   def render(answer = false)
     if answer == true && @impacted == false && @ship.nil? == false
