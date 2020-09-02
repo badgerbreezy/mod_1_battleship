@@ -16,6 +16,8 @@ class Gameplay
   reply = gets.chomp.downcase
     if reply == 'p'
       set_up
+    elsif reply == 'q'
+      exit
     else
       menu
     end
@@ -59,6 +61,9 @@ class Gameplay
       puts "==============PLAYER BOARD=============="
       player.board.render(true)
       player_shot_process
+      if computer.has_lost?
+        break
+      end
       computer_shot_process
     end
     if computer.has_lost? == true
