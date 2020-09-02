@@ -15,24 +15,24 @@ class Messages
   end
 
   def self.menu
-    puts "     ░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗".colorize(:color => :blue)
+    puts "\n     ░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗".colorize(:color => :blue)
     puts "     ░██║░░██╗░░██║██╔════╝██║░░░░░██╔══██╗██╔══██╗████╗░████║██╔════╝".colorize(:color => :blue)
     puts "     ░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░╚═╝██║░░██║██╔████╔██║█████╗░░".colorize(:color => :blue)
     puts "     ░░████╔═████║░██╔══╝░░██║░░░░░██║░░██╗██║░░██║██║╚██╔╝██║██╔══╝░░".colorize(:color => :blue)
     puts "     ░░╚██╔╝░╚██╔╝░███████╗███████╗╚█████╔╝╚█████╔╝██║░╚═╝░██║███████╗".colorize(:color => :blue)
-    puts "     ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝".colorize(:color => :blue)
-    puts " "
+    puts "     ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝\n".colorize(:color => :blue)
+
     sleep(2)
-    puts "                                ▀█▀ █▀█".colorize(:blue)
-    puts "                                ░█░ █▄█".colorize(:blue)
-    puts " "
+    puts "\n                                ▀█▀ █▀█".colorize(:blue)
+    puts "                                ░█░ █▄█\n".colorize(:blue)
+
     sleep(2)
-    puts "██████╗░░█████╗░████████╗████████╗██╗░░░░░███████╗░██████╗██╗░░██╗██╗██████╗░".colorize(:blue)
+    puts "\n██████╗░░█████╗░████████╗████████╗██╗░░░░░███████╗░██████╗██╗░░██╗██╗██████╗░".colorize(:blue)
     puts "██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██║░░░░░██╔════╝██╔════╝██║░░██║██║██╔══██╗".colorize(:blue)
     puts "██████╦╝███████║░░░██║░░░░░░██║░░░██║░░░░░█████╗░░╚█████╗░███████║██║██████╔╝".colorize(:blue)
     puts "██╔══██╗██╔══██║░░░██║░░░░░░██║░░░██║░░░░░██╔══╝░░░╚═══██╗██╔══██║██║██╔═══╝░".colorize(:blue)
     puts "██████╦╝██║░░██║░░░██║░░░░░░██║░░░███████╗███████╗██████╔╝██║░░██║██║██║░░░░░".colorize(:blue)
-    puts "╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚══════╝╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░░░░".colorize(:blue)
+    puts "╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚══════╝╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░░░░\n".colorize(:blue)
     puts " "
     sleep(2)
     puts "---------------------Created by Todd Estes and Brian Liu---------------------"
@@ -55,6 +55,9 @@ class Messages
     puts "You now need to lay out your two ships.\n"
     sleep(1)
     puts "The Cruiser is three units long and the Submarine is two units long.\n"
+    sleep(1)
+    puts "Each ship must be placed vertically or horizontally, and must be consecutive. You cannot place ships diagonally."
+    sleep(1)
   end
 
   def self.invalid_coordinates
@@ -89,7 +92,7 @@ class Messages
     sleep(1)
   end
 
-  def self.compuer_won
+  def self.computer_won
     puts "█▄█ █▀█ █░█ █▀█   █▀▀ █░░ █▀▀ █▀▀ ▀█▀   █░█ ▄▀█ █▀   █▄▄ █▀▀ █▀▀ █▄░█   █▀▄ █▀▀ █▀ ▀█▀ █▀█ █▀█ █▄█ █▀▀ █▀▄   ▀ ▄▀"
     puts "░█░ █▄█ █▄█ █▀▄   █▀░ █▄▄ ██▄ ██▄ ░█░   █▀█ █▀█ ▄█   █▄█ ██▄ ██▄ █░▀█   █▄▀ ██▄ ▄█ ░█░ █▀▄ █▄█ ░█░ ██▄ █▄▀   ▄ ▀▄"
     puts render_art_lose

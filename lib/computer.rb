@@ -1,25 +1,25 @@
 require './lib/gameplay'
 
 class Computer
-  attr_reader :board
-  def initialize(board)
-    @board = board
+  attr_reader :computer_board, :player
+  def initialize(computer_board)
+    @computer_board = computer_board
+    @player = player
   end
 
   def has_lost?
     dead_cells = []
-    board.grid.keys.map do |cell|
-      dead_cells << board.grid[cell].render
+    @computer_board.grid.keys.map do |cell|
+      dead_cells << @computer_board.grid[cell].render
     end
     if dead_cells.count("X") == 5
       @has_lost = true
     end
   end
 
-
   def ship_placement_random(ship)
     ship_location = determine_possible_placement(ship)
-    until @board.place(ship, ship_location.sample)
+    until @computer_board.place(ship, ship_location.sample)
     end
   end
 
@@ -56,5 +56,35 @@ class Computer
     end
 
     possible_columns_by_row + possible_rows_by_column
+  end
+
+  def render(answer = false)
+    column_range = 1..4
+    row_range = "A".."D"
+    board_rows = []
+    top_row ="  " + "1 2 3 4" + " \n"
+    row_range.each do |row|
+      row_string = row + " "
+      column_range.each do |column|
+        cell_coordinate = row + column.to_s
+        row_string += @grid[cell_coordinate].render(answer) + " "
+      end
+      board_rows << row_string + "\n"
+    end
+    puts top_row + board_rows.join
+  end
+
+# iteration 4 ahead
+  def detect_ship
+    ship_location =
+    @player.board.grid.keys.find_all do |cell|
+      @player.board.grid[cell].ship
+    end
+  end
+
+  def smart_shots(coordinate)
+    row_letter = coordinate[0]
+    column_number = coordinate[1].to_i
+    possible_coordinates = [(row_letter.ord - 1).chr + column_number.to_s, (row_letter.ord + 1).chr + column_number.to_s, row_letter + (column_number + 1).to_s, row_letter + (column_number - 1).to_s]
   end
 end
