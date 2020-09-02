@@ -20,8 +20,6 @@ class Gameplay
       exit
     else
       menu
-    else
-      menu
     end
   end
 
