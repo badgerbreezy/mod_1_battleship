@@ -31,6 +31,12 @@ class Gameplay
     @computer.ship_placement_random(@computer_submarine)
     Messages.setup1
     @player.board.render
+    verify_cruiser_coords
+    verify_sub_coords
+    turn
+  end
+
+  def verify_cruiser_coords
     puts "Enter the squares for the Cruiser (3 spaces):"
     puts ">"
     entry_1 = gets.chomp.upcase.split(" ")
@@ -39,15 +45,17 @@ class Gameplay
       entry_1 = gets.chomp.upcase.split(" ")
     end
     @player.board.place(@player_cruiser, entry_1)
+  end
+
+  def verify_sub_coords
     puts "Enter the squares for the Submarine (2 spaces)"
     puts ">"
     entry_2 = gets.chomp.upcase.split(" ")
-    until @player.board.valid_coordinate?(entry_2[0]) == true && @player.board.valid_coordinate?(entry_2[1]) == true && @player.board.valid_placement?(@player_sub, entry_2)
+    until @player.board.valid_coordinate?(entry_2[0]) == true && @player.board.valid_coordinate?(entry_2[1]) == true &&   @player.board.valid_placement?(@player_sub, entry_2)
       Messages.invalid_coordinates
       entry_2 = gets.chomp.upcase.split(" ")
     end
     @player.board.place(@player_sub, entry_2)
-    turn
   end
 
   def turn
