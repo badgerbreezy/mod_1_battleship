@@ -13,5 +13,4 @@ class Player
       @has_lost = true
     end
   end
-
 end
