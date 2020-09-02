@@ -51,7 +51,7 @@ class Gameplay
     puts "Enter the squares for the Submarine (2 spaces)"
     puts ">"
     entry_2 = gets.chomp.upcase.split(" ")
-    until @player.board.valid_coordinate?(entry_2[0]) == true && @player.board.valid_coordinate?(entry_2[1]) == true &&   @player.board.valid_placement?(@player_sub, entry_2)
+    until @player.board.valid_coordinate?(entry_2[0]) == true && @player.board.valid_coordinate?(entry_2[1]) == true && @player.board.valid_placement?(@player_sub, entry_2)
       Messages.invalid_coordinates
       entry_2 = gets.chomp.upcase.split(" ")
     end
