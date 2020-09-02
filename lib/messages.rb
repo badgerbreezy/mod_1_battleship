@@ -1,3 +1,5 @@
+require 'colorize'
+require 'colorized_string'
 class Messages
 
   def self.render_art_win
@@ -11,7 +13,6 @@ class Messages
       puts line
     end
   end
-
 
   def self.menu
     puts "     ░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗".colorize(:color => :blue)
@@ -73,6 +74,19 @@ class Messages
     puts render_art_win
     puts " "
     puts "===================================================================="
+    puts " "
+    sleep(5)
+    puts "Returning to menu in:"
+    puts "5"
+    sleep(1)
+    puts "4"
+    sleep(1)
+    puts "3"
+    sleep(1)
+    puts "2"
+    sleep(1)
+    puts "1"
+    sleep(1)
   end
 
   def self.compuer_won
@@ -80,6 +94,4 @@ class Messages
     puts "░█░ █▄█ █▄█ █▀▄   █▀░ █▄▄ ██▄ ██▄ ░█░   █▀█ █▀█ ▄█   █▄█ ██▄ ██▄ █░▀█   █▄▀ ██▄ ▄█ ░█░ █▀▄ █▄█ ░█░ ██▄ █▄▀   ▄ ▀▄"
     puts render_art_lose
   end
-
-
 end

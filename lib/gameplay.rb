@@ -1,5 +1,3 @@
-require 'colorize'
-require 'colorized_string'
 class Gameplay
   attr_reader :computer, :player, :messages
   def initialize(computer, player)
@@ -11,8 +9,6 @@ class Gameplay
     @computer_submarine = Ship.new("Submarine", 2)
     @messages = messages
   end
-
-
 
   def menu
     Messages.menu
@@ -54,7 +50,6 @@ class Gameplay
 
   def turn
     until computer.has_lost? == true || player.has_lost? == true
-      #require 'Pry';binding.pry
       puts "=============COMPUTER BOARD============="
       computer.board.render
       puts "==============PLAYER BOARD=============="
@@ -65,13 +60,13 @@ class Gameplay
         break
       end
       computer_shot_process
+      sleep(1)
     end
     if computer.has_lost? == true
       Messages.player_won
     elsif player.has_lost? == true
       Messages.computer_won
     end
-    sleep(5)
     menu
   end
 
